@@ -7,10 +7,9 @@ var tasksInProgressEl = document.querySelector("#tasks-in-progress");
 var tasksCompletedEl = document.querySelector("#tasks-completed");
 
 var completeEditTask = function(taskName, taskType, taskId) {
-  // find the matching task list item
+
 var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
 
-  // set new values
   taskSelected.querySelector("h3.task-name").textContent = taskName;
   taskSelected.querySelector("span.task-type").textContent = taskType;
 
@@ -19,6 +18,15 @@ var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId +
   formEl.removeAttribute("data-task-id");
   document.querySelector("#save-task").textContent = "Add Task";
 };
+
+//Event Handler section
+
+var dragLeaveHandler = function(event) {
+  var taskListEl = event.target.closest(".task-list");
+  if (taskListEl) {
+    taskListEl.removeAttribute("style");
+}
+}
 
 var dragTaskHandler = function(event) {
   var taskId = event.target.getAttribute("data-task-id");
@@ -31,6 +39,7 @@ var dropZoneDragHandler = function(event) {
   var taskListEl = event.target.closest(".task-list");
   if (taskListEl) {
     event.preventDefault();
+      taskListEl.setAttribute("style", "background: rgba(68, 233, 255, 0.7); border-style: dashed;");
   }
 };
 
@@ -50,6 +59,7 @@ var dropTaskHandler = function(event) {
     else if (statusType === "tasks-completed") {
       statusSelectEl.selectedIndex = 2;
     }
+    dropZoneEl.removeAttribute("style");
     dropZoneEl.appendChild(draggableElement);
 
 };
@@ -212,6 +222,7 @@ var taskButtonHandler = function(event) {
   }
 };
 
+pageContentEl.addEventListener("dragleave", dragLeaveHandler);
 pageContentEl.addEventListener("drop", dropTaskHandler);
 pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 pageContentEl.addEventListener("dragstart", dragTaskHandler);
